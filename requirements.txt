@@ -1,5 +1,4 @@
-flask
-gunicorn
+Flask
 pymongo
-pytz
 dnspython
+pytz
