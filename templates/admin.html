@@ -34,7 +34,7 @@
         .sidebar { width: var(--sidebar-width); background: rgba(17, 24, 39, 0.98); backdrop-filter: blur(10px); height: 100vh; position: fixed; right: 0; top: 0; border-left: 1px solid var(--border); padding: 30px 0; z-index: 2000; transition: transform 0.3s ease-in-out; overflow-y: auto;}
         .logo { text-align: center; font-size: 26px; font-weight: 900; color: var(--gold); margin-bottom: 40px; text-shadow: 0 0 15px var(--gold-glow); }
         .nav-links { list-style: none; padding: 0 15px; display: flex; flex-direction: column; gap: 8px; }
-        .nav-links li { color: var(--text-muted); font-size: 16px; font-weight: 700; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 15px; }
+        .nav-links li { color: var(--text-muted); font-size: 15px; font-weight: 700; padding: 15px; border-radius: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 15px; }
         .nav-links li:hover, .nav-links li.active { background: rgba(255, 179, 0, 0.1); color: var(--gold); box-shadow: inset -4px 0 0 var(--gold); }
         
         .main-content { margin-right: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); padding: 30px; transition: margin 0.3s, width 0.3s; }
@@ -42,7 +42,7 @@
         .content-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: var(--bg-card); padding: 15px 25px; border-radius: 15px; border: 1px solid var(--border); gap: 10px;}
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: var(--bg-card); padding: 15px 25px; border-radius: 15px; border: 1px solid var(--border); gap: 10px; flex-wrap:wrap;}
         .live-indicator { display: flex; align-items: center; gap: 8px; color: var(--success); font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 8px 15px; border-radius: 20px; font-size: 14px; white-space: nowrap;}
         .dot { width: 10px; height: 10px; background: var(--success); border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0.3; } }
@@ -52,7 +52,7 @@
         .card h3 { color: var(--text-muted); font-size: 14px; margin-bottom: 8px; text-transform: uppercase;}
         .card h2 { font-size: 28px; color: #fff; font-weight: 900; margin: 0;}
 
-        /* تنسيقات الجدول المحسنة */
+        /* تنسيقات الجدول المتجاوبة مع white-space: nowrap لضمان عدم كسر السطور */
         .table-container { background: var(--bg-card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 30px; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; min-width: 650px; }
         table th { padding: 12px 10px; text-align: center; color: var(--text-muted); border-bottom: 2px solid var(--border); background: rgba(0,0,0,0.2); white-space: nowrap; font-size: 14px;}
@@ -77,8 +77,7 @@
         .menu-toggle-btn { display: none; background: rgba(255,179,0,0.1); color: var(--gold); border: 1px solid var(--gold); border-radius: 10px; padding: 6px 12px; font-size: 18px; cursor: pointer; }
         .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1500; backdrop-filter: blur(3px); }
 
-        /* التوافق التام مع شاشات الهاتف */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .sidebar { transform: translateX(100%); width: 240px; } 
             .sidebar.open { transform: translateX(0); } 
             .sidebar-overlay.open { display: block; } 
@@ -88,23 +87,18 @@
             #welcome-text { font-size: 18px !important; }
             .live-indicator { font-size: 12px; padding: 5px 10px; }
             
-            /* تصغير الكروت */
             .cards-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; } 
             .card { padding: 15px; border-radius: 12px;}
             .card h2 { font-size: 20px; }
             .card h3 { font-size: 11px; }
-            .card i { font-size: 1.5em; }
             
-            /* تصغير مسافات الجدول لتوسيع الشاشة */
             .table-container { padding: 10px 5px; border-radius: 10px; margin-bottom: 15px;} 
             table th { padding: 10px 5px; font-size: 12px; }
             table td { padding: 10px 5px; font-size: 12px; }
             
-            /* إخفاء نصوص الأزرار وترك الأيقونات فقط لتوفير المساحة */
             .btn span.btn-text { display: none; }
             .btn { padding: 5px 10px; font-size: 12px; }
             
-            /* ترتيب فلاتر البحث فوق بعضها */
             .filter-group { min-width: 100%; flex: 1 1 100%; margin-bottom: 5px;} 
             .filter-bar { flex-direction: column; align-items: stretch; padding: 10px;}
         }
@@ -135,9 +129,12 @@
                 <li onclick="switchTab('archive', this)"><i class="fas fa-chart-pie"></i> <span class="btn-text">الأرشيف المالي</span></li>
                 <li onclick="switchTab('frauds', this)" style="color: var(--danger);"><i class="fas fa-user-secret"></i> <span class="btn-text">عمليات الاحتيال</span></li>
                 <li onclick="switchTab('products', this)"><i class="fas fa-box"></i> <span class="btn-text">إدارة العروض</span></li>
+                <li class="admin-only" onclick="switchTab('categories', this)"><i class="fas fa-layer-group"></i> <span class="btn-text">إدارة الأقسام</span></li>
                 <li onclick="switchTab('staff', this)"><i class="fas fa-users-cog"></i> <span class="btn-text">طاقم العمل</span></li>
                 <li onclick="switchTab('staff-reports', this)"><i class="fas fa-chart-line"></i> <span class="btn-text">تقارير الأرباح</span></li>
-                <li style="color:var(--danger); margin-top:50px;" onclick="location.href='/admin-logout'"><i class="fas fa-power-off"></i> <span class="btn-text">تسجيل الخروج</span></li>
+                
+                <li class="admin-only" onclick="wipeDatabase()" style="color:var(--danger); border-top:1px solid rgba(239,68,68,0.3); margin-top:20px; padding-top:20px;"><i class="fas fa-bomb"></i> <span class="btn-text">تصفير النظام بالكامل</span></li>
+                <li style="color:var(--text-muted); margin-top:15px;" onclick="location.href='/admin-logout'"><i class="fas fa-power-off"></i> <span class="btn-text">تسجيل الخروج</span></li>
             </ul>
         </aside>
 
@@ -150,6 +147,11 @@
                         <p style="color:var(--text-muted); font-size:12px; margin:0;">لوحة القيادة</p>
                     </div>
                 </div>
+                <select id="global-device-filter" class="login-input" style="width:auto; margin:0; padding:8px 15px; font-weight:bold; border-color:var(--cyan); color:var(--cyan); background:rgba(6,182,212,0.1);" onchange="refreshData(true)">
+                    <option value="all">عرض بيانات: الكل</option>
+                    <option value="android">طلبات: أندرويد فقط</option>
+                    <option value="iphone">طلبات: آيفون فقط</option>
+                </select>
                 <div class="live-indicator"><div class="dot"></div> متصل</div>
             </header>
 
@@ -167,7 +169,7 @@
                 <div class="table-container">
                     <h3 style="margin-bottom:15px; color:var(--cyan); font-size:16px;"><i class="fas fa-bolt"></i> طلبات بانتظار التنفيذ</h3>
                     <table>
-                        <thead><tr><th>الباقة</th><th>ID اللاعب</th><th>الوقت</th><th>المبلغ</th><th>إجراء</th></tr></thead>
+                        <thead><tr><th>النظام/القسم</th><th>الباقة</th><th>ID اللاعب</th><th>الوقت</th><th>المبلغ</th><th>إجراء</th></tr></thead>
                         <tbody id="pending-list"></tbody>
                     </table>
                 </div>
@@ -183,7 +185,7 @@
                 <div class="table-container">
                     <h3 style="margin-bottom:15px; color:var(--gold); font-size:16px;"><i class="fas fa-history"></i> سجل العمليات المكتملة</h3>
                     <table>
-                        <thead><tr><th>التاريخ</th><th>المنفذ</th><th>الباقة</th><th>ID اللاعب</th><th>المبلغ / إجراء</th></tr></thead>
+                        <thead><tr><th>التاريخ</th><th>المنفذ</th><th>النظام/القسم</th><th>الباقة</th><th>ID اللاعب</th><th>المبلغ / إجراء</th></tr></thead>
                         <tbody id="archive-list"></tbody>
                     </table>
                 </div>
@@ -199,7 +201,7 @@
                 <div class="table-container">
                     <h3 style="margin-bottom:15px; color:var(--danger); font-size:16px;"><i class="fas fa-user-secret"></i> سجل محاولات الاحتيال</h3>
                     <table>
-                        <thead><tr><th>الباقة</th><th>ID اللاعب</th><th>الوقت</th><th>الموظف</th><th>إجراء</th></tr></thead>
+                        <thead><tr><th>النظام/القسم</th><th>الباقة</th><th>ID اللاعب</th><th>الوقت</th><th>الموظف</th><th>إجراء</th></tr></thead>
                         <tbody id="fraud-list"></tbody>
                     </table>
                 </div>
@@ -212,8 +214,21 @@
                         <button class="btn btn-green" onclick="addProduct()"><i class="fas fa-plus"></i> <span class="btn-text">إضافة</span></button>
                     </div>
                     <table>
-                        <thead><tr><th>الصورة</th><th>الباقة</th><th>السعر</th><th>المضيف</th><th>إجراء</th></tr></thead>
+                        <thead><tr><th>الصورة</th><th>الباقة</th><th>السعر</th><th>القسم والنظام</th><th>المضيف</th><th>إجراء</th></tr></thead>
                         <tbody id="products-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="categories" class="content-section">
+                <div class="table-container">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3 style="color:var(--success); font-size:16px; margin:0;"><i class="fas fa-layer-group"></i> أقسام المتجر الفرعية</h3>
+                        <button class="btn btn-green admin-only" onclick="addCategory()"><i class="fas fa-plus"></i> <span class="btn-text">إضافة قسم</span></button>
+                    </div>
+                    <table>
+                        <thead><tr><th>اسم القسم</th><th>نظام التشغيل (الأب)</th><th>إجراء</th></tr></thead>
+                        <tbody id="categories-list"></tbody>
                     </table>
                 </div>
             </div>
@@ -255,7 +270,7 @@
                 <div class="table-container">
                     <h3 style="margin-bottom:15px; color:var(--success); font-size:16px;"><i class="fas fa-clipboard-list"></i> تفاصيل العمليات</h3>
                     <table>
-                        <thead><tr><th>الموظف</th><th>التاريخ</th><th>الباقة</th><th>ID اللاعب</th><th>المبلغ</th></tr></thead>
+                        <thead><tr><th>الموظف</th><th>التاريخ</th><th>القسم</th><th>الباقة</th><th>المبلغ</th></tr></thead>
                         <tbody id="report-table-body"></tbody>
                     </table>
                 </div>
@@ -267,6 +282,7 @@
         let me = null;
         let globalOrders = []; 
         let globalAdmins = []; 
+        let globalCategories = [];
         const swalDark = { background: '#1F2937', color: '#fff', confirmButtonColor: '#FFB300' };
 
         function toggleSidebar() {
@@ -274,6 +290,7 @@
             document.querySelector('.sidebar-overlay').classList.toggle('open');
         }
 
+        // كود الدخول الخاص بك (الأصلي تماما)
         async function handleLogin() {
             const res = await fetch('/admin-login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({username: document.getElementById('user').value, password: document.getElementById('pass').value})});
             const data = await res.json();
@@ -281,41 +298,61 @@
             else Swal.fire({...swalDark, icon: 'error', title: 'خطأ', text: data.message});
         }
 
-        async function refreshData() {
-            const res = await fetch('/api/data');
-            const data = await res.json();
-            if(!data.currentUser) return;
+        async function refreshData(isFilterUpdate = false) {
+            let data;
+            if(!isFilterUpdate) {
+                const res = await fetch('/api/data');
+                data = await res.json();
+                if(!data.currentUser) return;
 
-            me = data.currentUser;
-            globalOrders = data.orders || [];
-            globalAdmins = (data.stats && data.stats.admins) ? data.stats.admins : [];
+                me = data.currentUser;
+                globalOrders = data.orders || [];
+                globalAdmins = (data.stats && data.stats.admins) ? data.stats.admins : [];
+                globalCategories = data.categories || [];
 
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-            document.getElementById('welcome-text').innerText = me.name;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+                document.getElementById('welcome-text').innerText = me.name;
 
-            if(me.role === 'super_admin') {
-                document.querySelectorAll('.admin-only').forEach(e => e.style.display = 'flex');
-                document.getElementById('today-profit-title').innerText = "أرباح النظام اليوم";
-                document.getElementById('total-profit-title').innerText = "إجمالي النظام";
-            } else {
-                document.getElementById('today-profit-title').innerText = "أرباحك (اليوم)";
-                document.getElementById('total-profit-title').innerText = "إجمالي أرباحك";
+                if(me.role === 'super_admin') {
+                    document.querySelectorAll('.admin-only').forEach(e => e.style.display = 'flex');
+                    document.getElementById('today-profit-title').innerText = "أرباح النظام اليوم";
+                    document.getElementById('total-profit-title').innerText = "إجمالي النظام";
+                } else {
+                    document.getElementById('today-profit-title').innerText = "أرباحك (اليوم)";
+                    document.getElementById('total-profit-title').innerText = "إجمالي أرباحك";
+                }
+                initReportFilters();
             }
 
-            initReportFilters();
+            const devFilter = document.getElementById('global-device-filter').value;
+            let currentOrders = globalOrders;
+            if (devFilter !== 'all') {
+                currentOrders = globalOrders.filter(o => o.deviceCategory && o.deviceCategory.includes(devFilter === 'android' ? 'أندرويد' : 'آيفون'));
+            }
 
-            document.getElementById('pending-count').innerText = data.stats.pendingCount;
-            document.getElementById('today-profit').innerText = (me.role === 'super_admin' ? data.stats.todaySales : data.stats.myTodaySales) + " EGP";
-            document.getElementById('total-profit').innerText = (me.role === 'super_admin' ? data.stats.totalSales : data.stats.myTotalSales) + " EGP";
-            if(document.getElementById('fraud-count')) document.getElementById('fraud-count').innerText = data.stats.fraudCount;
+            const todayStr = new Date().toISOString().split('T')[0];
+            const completed = currentOrders.filter(o => o.status === 'completed');
+            const frauds = currentOrders.filter(o => o.status === 'fraud');
+            const myCompleted = completed.filter(o => o.handled_by === me.name);
 
-            // تنسيق زر الأكشن ليكون مدمج في سطر واحد
+            document.getElementById('pending-count').innerText = currentOrders.filter(o => o.status === 'pending').length;
+            document.getElementById('fraud-count').innerText = frauds.length;
+            
+            if(me.role === 'super_admin') {
+                document.getElementById('today-profit').innerText = completed.filter(o => o.handled_at && o.handled_at.startsWith(todayStr)).reduce((s,o)=>s+parseFloat(o.amount||o.price||0),0) + " EGP";
+                document.getElementById('total-profit').innerText = completed.reduce((s,o)=>s+parseFloat(o.amount||o.price||0),0) + " EGP";
+            } else {
+                document.getElementById('today-profit').innerText = myCompleted.filter(o => o.handled_at && o.handled_at.startsWith(todayStr)).reduce((s,o)=>s+parseFloat(o.amount||o.price||0),0) + " EGP";
+                document.getElementById('total-profit').innerText = myCompleted.reduce((s,o)=>s+parseFloat(o.amount||o.price||0),0) + " EGP";
+            }
+
             const actionStyle = "display:flex; justify-content:center; gap:5px;";
 
-            const pending = data.orders.filter(o => o.status === 'pending');
+            const pending = currentOrders.filter(o => o.status === 'pending');
             document.getElementById('pending-list').innerHTML = pending.length ? pending.map(o => `
                 <tr>
+                    <td style="font-size:11px; color:var(--cyan);">${o.deviceCategory || 'غير محدد'}</td>
                     <td style="font-weight:bold; font-size:13px;">${o.productName || o.product || ''}</td>
                     <td><span class="id-badge">${o.pubgId || ''}</span></td>
                     <td style="font-size:11px; color:var(--text-muted);">${o.date}</td>
@@ -329,14 +366,14 @@
                         </div>
                     </td>
                 </tr>
-            `).join('') : '<tr><td colspan="5" style="color:var(--success); padding:20px;"><i class="fas fa-check-circle fa-2x"></i></td></tr>';
+            `).join('') : '<tr><td colspan="6" style="color:var(--success); padding:20px;"><i class="fas fa-check-circle fa-2x"></i></td></tr>';
 
-            // إضافة زر عرض الإيصال في الأرشيف
-            const archive = data.orders.filter(o => o.status === 'completed').reverse();
+            const archive = completed.reverse();
             document.getElementById('archive-list').innerHTML = archive.map(o => `
                 <tr>
                     <td style="font-size:11px; color:var(--text-muted);">${o.handled_at}</td>
                     <td><span style="background:rgba(6,182,212,0.1); color:var(--cyan); padding:3px 6px; border-radius:5px; font-size:11px;">${o.handled_by}</span></td>
+                    <td style="font-size:11px; color:var(--cyan);">${o.deviceCategory || ''}</td>
                     <td style="font-weight:bold; font-size:13px;">${o.productName || o.product || ''}</td>
                     <td style="font-family:monospace; font-size:12px;">${o.pubgId || ''}</td>
                     <td>
@@ -349,11 +386,11 @@
                 </tr>
             `).join('');
 
-            // إضافة زر عرض الإيصال في الاحتيال
-            const frauds = data.orders.filter(o => o.status === 'fraud').reverse();
+            const fraudList = frauds.reverse();
             if(document.getElementById('fraud-list')) {
-                document.getElementById('fraud-list').innerHTML = frauds.map(o => `
+                document.getElementById('fraud-list').innerHTML = fraudList.map(o => `
                     <tr>
+                        <td style="font-size:11px; color:var(--cyan);">${o.deviceCategory || ''}</td>
                         <td style="font-weight:bold; color:var(--danger); font-size:13px;">${o.productName || o.product || ''}</td>
                         <td style="font-family:monospace; font-size:12px;">${o.pubgId || ''}</td>
                         <td style="font-size:11px; color:var(--text-muted);">${o.handled_at}</td>
@@ -368,63 +405,65 @@
                 `).join('');
             }
 
-            document.getElementById('products-list').innerHTML = data.products.map(p => `
-                <tr>
-                    <td><img src="${p.image}" width="30" style="border-radius:6px;"></td>
-                    <td style="font-weight:bold; font-size:13px;">${p.name}</td>
-                    <td style="color:var(--gold); font-weight:bold; font-size:13px;">${p.price} EGP</td>
-                    <td style="font-size:11px; color:var(--cyan);">${p.added_by || 'السيستم'}</td>
-                    <td>${me.role === 'super_admin' ? `<button class="btn btn-red" onclick="delProduct('${p.id}')" title="حذف"><i class="fas fa-trash"></i></button>` : '<span style="color:var(--text-muted); font-size:10px;">إدارة</span>'}</td>
-                </tr>
-            `).join('');
+            if(!isFilterUpdate) {
+                if (document.getElementById('categories-list')) {
+                    document.getElementById('categories-list').innerHTML = globalCategories.map(c => `
+                        <tr>
+                            <td style="font-weight:bold; font-size:13px;">${c.name}</td>
+                            <td style="color:var(--cyan); font-weight:bold; font-size:14px;">${c.parent === 'android' ? '<i class="fab fa-android"></i> أندرويد' : '<i class="fab fa-apple"></i> آيفون'}</td>
+                            <td>${me.role === 'super_admin' ? `<button class="btn btn-red" onclick="delCategory('${c.id}')" title="حذف"><i class="fas fa-trash"></i></button>` : '---'}</td>
+                        </tr>
+                    `).join('');
+                }
 
-            document.getElementById('staff-list').innerHTML = data.stats.admins.map(a => `
-                <tr>
-                    <td style="font-weight:bold; font-size:13px;">${a.name} ${a.role==='super_admin'?'<i class="fas fa-crown" style="color:var(--gold)"></i>':''}</td>
-                    <td style="font-family:monospace; color:var(--cyan); font-size:12px;">${a.username}</td>
-                    <td style="color:var(--gold); font-weight:bold; font-size:13px;">${a.total_earned} EGP</td>
-                    <td>
-                        <div style="${actionStyle}">
-                            ${a.username === me.username ? 
-                                `<button class="btn btn-blue" onclick="editMyData()" title="بياناتي"><i class="fas fa-user-edit"></i></button>` : 
-                                (me.role === 'super_admin' ? `<button class="btn btn-blue" onclick="editStaffData('${a.username}', '${a.name}')" title="تعديل"><i class="fas fa-edit"></i></button> <button class="btn btn-red" onclick="delStaff('${a.username}')" title="حذف"><i class="fas fa-trash"></i></button>` : '')
-                            }
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+                document.getElementById('products-list').innerHTML = data.products.map(p => {
+                    let cat = globalCategories.find(c => c.id === p.categoryId);
+                    let catName = cat ? `${cat.parent === 'android' ? 'أندرويد' : 'آيفون'} - ${cat.name}` : 'القسم محذوف';
+                    return `
+                    <tr>
+                        <td><img src="${p.image}" width="30" style="border-radius:6px;"></td>
+                        <td style="font-weight:bold; font-size:13px;">${p.name}</td>
+                        <td style="color:var(--gold); font-weight:bold; font-size:13px;">${p.price} EGP</td>
+                        <td style="font-size:11px; color:var(--text-muted);">${catName}</td>
+                        <td style="font-size:11px; color:var(--cyan);">${p.added_by || 'السيستم'}</td>
+                        <td>
+                            <div style="${actionStyle}">
+                                ${me.role === 'super_admin' ? `
+                                <button class="btn btn-blue" onclick="editProduct('${p.id}')" title="تعديل"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-red" onclick="delProduct('${p.id}')" title="حذف"><i class="fas fa-trash"></i></button>
+                                ` : '<span style="color:var(--text-muted); font-size:10px;">إدارة</span>'}
+                            </div>
+                        </td>
+                    </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('staff-list').innerHTML = data.stats.admins.map(a => `
+                    <tr>
+                        <td style="font-weight:bold; font-size:13px;">${a.name} ${a.role==='super_admin'?'<i class="fas fa-crown" style="color:var(--gold)"></i>':''}</td>
+                        <td style="font-family:monospace; color:var(--cyan); font-size:12px;">${a.username}</td>
+                        <td style="color:var(--gold); font-weight:bold; font-size:13px;">${a.total_earned} EGP</td>
+                        <td>
+                            <div style="${actionStyle}">
+                                ${a.username === me.username ? 
+                                    `<button class="btn btn-blue" onclick="editMyData()" title="بياناتي"><i class="fas fa-user-edit"></i></button>` : 
+                                    (me.role === 'super_admin' ? `<button class="btn btn-blue" onclick="editStaffData('${a.username}', '${a.name}')" title="تعديل"><i class="fas fa-edit"></i></button> <button class="btn btn-red" onclick="delStaff('${a.username}')" title="حذف"><i class="fas fa-trash"></i></button>` : '')
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
         }
 
         async function editMyData() {
-            const { value: v } = await Swal.fire({
-                ...swalDark, title: 'تعديل بياناتي',
-                html: `<input id="un" class="login-input" value="${me.name}" placeholder="الاسم (يظهر بالأرشيف)">
-                       <input id="up" type="password" class="login-input" placeholder="الباسورد الجديد">`,
-                preConfirm: () => ({ name: document.getElementById('un').value, pass: document.getElementById('up').value })
-            });
-            if(v && v.name && v.pass) {
-                await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_staff', sub:'self_update', new_name:v.name, new_pass:v.pass}) });
-                Swal.fire({...swalDark, icon:'success', title:'تم!', timer:1500}); refreshData();
-            }
+            const { value: v } = await Swal.fire({...swalDark, title: 'تعديل بياناتي', html: `<input id="un" class="login-input" value="${me.name}" placeholder="الاسم (يظهر بالأرشيف)"><input id="up" type="password" class="login-input" placeholder="الباسورد الجديد">`, preConfirm: () => ({ name: document.getElementById('un').value, pass: document.getElementById('up').value }) });
+            if(v && v.name && v.pass) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_staff', sub:'self_update', new_name:v.name, new_pass:v.pass}) }); Swal.fire({...swalDark, icon:'success', title:'تم!', timer:1500}); refreshData(); }
         }
 
         async function editStaffData(old_username, old_name) {
-            const { value: v } = await Swal.fire({
-                ...swalDark, title: 'تعديل الموظف',
-                html: `
-                    <input id="en" class="login-input" value="${old_name}" placeholder="الاسم">
-                    <input id="eu" class="login-input" value="${old_username}" placeholder="اليوزر">
-                    <input id="ep" class="login-input" placeholder="باسورد جديد (أو اتركه فارغ)">
-                `,
-                preConfirm: () => ({ name: document.getElementById('en').value, username: document.getElementById('eu').value, pass: document.getElementById('ep').value })
-            });
-            if(v && v.name && v.username) {
-                await fetch('/api/action', { 
-                    method:'POST', headers:{'Content-Type':'application/json'}, 
-                    body:JSON.stringify({action:'manage_staff', sub:'edit', old_username: old_username, old_name: old_name, new_name: v.name, new_username: v.username, new_pass: v.pass}) 
-                });
-                Swal.fire({...swalDark, icon:'success', title:'تم!', timer:1500}); refreshData();
-            }
+            const { value: v } = await Swal.fire({...swalDark, title: 'تعديل الموظف', html: `<input id="en" class="login-input" value="${old_name}" placeholder="الاسم"><input id="eu" class="login-input" value="${old_username}" placeholder="اليوزر"><input id="ep" class="login-input" placeholder="باسورد جديد (أو اتركه فارغ)">`, preConfirm: () => ({ name: document.getElementById('en').value, username: document.getElementById('eu').value, pass: document.getElementById('ep').value }) });
+            if(v && v.name && v.username) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_staff', sub:'edit', old_username: old_username, old_name: old_name, new_name: v.name, new_username: v.username, new_pass: v.pass}) }); Swal.fire({...swalDark, icon:'success', title:'تم!', timer:1500}); refreshData(); }
         }
 
         function switchTab(id, el) {
@@ -432,7 +471,7 @@
             document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
-            if(window.innerWidth <= 768) toggleSidebar();
+            if(window.innerWidth <= 1024) toggleSidebar();
         }
 
         function initReportFilters() {
@@ -462,33 +501,88 @@
             const admin = document.getElementById('report-admin').value;
             const start = document.getElementById('report-start').value;
             const end = document.getElementById('report-end').value;
+            const devFilter = document.getElementById('global-device-filter').value;
+            
             let filtered = globalOrders.filter(o => o.status === 'completed');
+            if (devFilter !== 'all') filtered = filtered.filter(o => o.deviceCategory && o.deviceCategory.includes(devFilter === 'android' ? 'أندرويد' : 'آيفون'));
             if (admin) filtered = filtered.filter(o => o.handled_by === admin);
             if (start || end) {
                 filtered = filtered.filter(o => {
-                    const d = o.handled_at ? o.handled_at.substring(0, 10) : '';
-                    return (!start || d >= start) && (!end || d <= end);
+                    const d = o.handled_at ? o.handled_at.substring(0, 10) : ''; return (!start || d >= start) && (!end || d <= end);
                 });
             }
             document.getElementById('report-total-earned').innerText = filtered.reduce((s, o) => s + parseFloat(o.amount || o.price || 0), 0) + ' EGP';
             document.getElementById('report-total-ops').innerText = filtered.length;
-            document.getElementById('report-table-body').innerHTML = filtered.reverse().map(o => `<tr><td><span style="color:var(--gold); font-size:12px;">${o.handled_by}</span></td><td style="color:var(--text-muted); font-size:11px;">${o.handled_at}</td><td style="font-weight:bold; font-size:13px;">${o.productName || o.product || ''}</td><td style="font-family:monospace; font-size:12px;">${o.pubgId}</td><td style="color:var(--success); font-weight:bold; font-size:13px;">${o.amount || o.price || 0} EGP</td></tr>`).join('');
+            document.getElementById('report-table-body').innerHTML = filtered.reverse().map(o => `<tr><td><span style="color:var(--gold); font-size:12px;">${o.handled_by}</span></td><td style="color:var(--text-muted); font-size:11px;">${o.handled_at}</td><td style="font-size:11px; color:var(--cyan);">${o.deviceCategory || ''}</td><td style="font-weight:bold; font-size:13px;">${o.productName || o.product || ''}</td><td style="color:var(--success); font-weight:bold; font-size:13px;">${o.amount || o.price || 0} EGP</td></tr>`).join('');
         }
 
         async function markDone(id) { await fetch('/api/action', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action: 'complete_order', orderId: id}) }); refreshData(); }
         async function undoOrder(id) { if(confirm('تراجع عن العملية؟')) { await fetch('/api/action', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action: 'undo_order', orderId: id}) }); refreshData(); } }
         async function markFraud(id) { if(confirm('احتيال؟')) { await fetch('/api/action', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action: 'mark_fraud', orderId: id}) }); refreshData(); } }
         function viewImage(img) { Swal.fire({...swalDark, imageUrl: img, confirmButtonText: 'إغلاق'}); }
+        
+        async function addCategory() {
+            const { value: v } = await Swal.fire({...swalDark, title: 'إضافة قسم جديد', html: `
+                <input id="cn" class="login-input" placeholder="اسم القسم (مثال: شدات ببجي)">
+                <select id="cp" class="login-input" style="color:#fff; background:#000;">
+                    <option value="android">يتبع لنظام الأندرويد</option>
+                    <option value="iphone">يتبع لنظام الآيفون</option>
+                </select>
+            `, preConfirm: () => ({ name: document.getElementById('cn').value, parent: document.getElementById('cp').value }) });
+            if(v && v.name) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_category', sub:'add', name: v.name, parent: v.parent}) }); refreshData(); }
+        }
+        async function delCategory(id) {
+            if(confirm('حذف هذا القسم؟')) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_category', sub:'delete', id: id}) }); refreshData(); }
+        }
+
+        async function wipeDatabase() {
+            const { isConfirmed } = await Swal.fire({ ...swalDark, title: 'تنبيه خطير جداً!', text: 'سيتم مسح جميع الطلبات والمنتجات والأقسام. هل أنت متأكد؟', icon: 'warning', showCancelButton: true, confirmButtonColor: '#EF4444', cancelButtonColor: '#374151', confirmButtonText: 'تصفير النظام', cancelButtonText: 'إلغاء' });
+            if (isConfirmed) { await fetch('/api/action', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action: 'wipe_database'}) }); Swal.fire({...swalDark, icon: 'success', title: 'تم التصفير!'}); refreshData(); }
+        }
+
         async function delProduct(id) { if(confirm('حذف المنتج؟')) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_product', sub:'delete', id:id}) }); refreshData(); } }
         async function delStaff(u) { if(confirm('حذف الموظف؟')) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_staff', sub:'delete', username:u}) }); refreshData(); } }
         async function delOrder(id) { if(confirm('حذف نهائي؟')) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'delete_order', orderId:id}) }); refreshData(); } }
         
         async function addProduct() {
-            const { value: v } = await Swal.fire({...swalDark, title: 'إضافة باقة', html: '<input id="pn" class="login-input" placeholder="الاسم"><input id="pp" type="number" class="login-input" placeholder="السعر"><input id="pi" type="file" class="login-input">', preConfirm: () => {
+            let catOptions = globalCategories.map(c => `<option value="${c.id}">${c.parent === 'android' ? 'أندرويد' : 'آيفون'} - ${c.name}</option>`).join('');
+            const { value: v } = await Swal.fire({...swalDark, title: 'إضافة باقة', html: `
+                <input id="pn" class="login-input" placeholder="الاسم">
+                <input id="pp" type="number" class="login-input" placeholder="السعر">
+                <select id="pc" class="login-input" style="color:#fff; background:#000;">
+                    <option value="" disabled selected>اختر القسم...</option>
+                    ${catOptions}
+                </select>
+                <input id="pi" type="file" class="login-input">
+            `, preConfirm: () => {
                 const f = document.getElementById('pi').files[0]; if(!f) return false;
-                return new Promise(r => { const rd = new FileReader(); rd.onload = (e) => r({ name: document.getElementById('pn').value, price: document.getElementById('pp').value, image: e.target.result }); rd.readAsDataURL(f); });
+                const cat = document.getElementById('pc').value; if(!cat) { Swal.showValidationMessage('اختر القسم!'); return false; }
+                return new Promise(r => { const rd = new FileReader(); rd.onload = (e) => r({ name: document.getElementById('pn').value, price: document.getElementById('pp').value, categoryId: cat, image: e.target.result }); rd.readAsDataURL(f); });
             }});
             if(v) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_product', sub:'add', product:{id:Date.now().toString(), ...v}}) }); refreshData(); }
+        }
+
+        async function editProduct(id) {
+            const res = await fetch('/api/data'); const d = await res.json();
+            const prod = d.products.find(x => x.id === id);
+            
+            let catOptions = globalCategories.map(c => `<option value="${c.id}" ${c.id === prod.categoryId ? 'selected' : ''}>${c.parent === 'android' ? 'أندرويد' : 'آيفون'} - ${c.name}</option>`).join('');
+            const { value: v } = await Swal.fire({...swalDark, title: 'تعديل باقة', html: `
+                <input id="pn" class="login-input" value="${prod.name}" placeholder="الاسم">
+                <input id="pp" type="number" class="login-input" value="${prod.price}" placeholder="السعر">
+                <select id="pc" class="login-input" style="color:#fff; background:#000;">${catOptions}</select>
+                <label style="color:var(--text-muted); font-size:12px; display:block; text-align:right;">صورة جديدة (اتركها فارغ لعدم التغيير)</label>
+                <input id="pi" type="file" class="login-input">
+            `, preConfirm: () => {
+                const f = document.getElementById('pi').files[0];
+                const cat = document.getElementById('pc').value;
+                if(f) {
+                    return new Promise(r => { const rd = new FileReader(); rd.onload = (e) => r({ id: id, name: document.getElementById('pn').value, price: document.getElementById('pp').value, categoryId: cat, image: e.target.result }); rd.readAsDataURL(f); });
+                } else {
+                    return { id: id, name: document.getElementById('pn').value, price: document.getElementById('pp').value, categoryId: cat };
+                }
+            }});
+            if(v) { await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'manage_product', sub:'edit', product: v}) }); refreshData(); }
         }
         
         async function addStaff() {
