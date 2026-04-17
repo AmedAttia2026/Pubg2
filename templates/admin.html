@@ -52,6 +52,7 @@
         .card h3 { color: var(--text-muted); font-size: 14px; margin-bottom: 8px; text-transform: uppercase;}
         .card h2 { font-size: 28px; color: #fff; font-weight: 900; margin: 0;}
 
+        /* تنسيقات الجدول المحسنة */
         .table-container { background: var(--bg-card); padding: 20px; border-radius: 15px; border: 1px solid var(--border); overflow-x: auto; margin-bottom: 30px; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; min-width: 650px; }
         table th { padding: 12px 10px; text-align: center; color: var(--text-muted); border-bottom: 2px solid var(--border); background: rgba(0,0,0,0.2); white-space: nowrap; font-size: 14px;}
@@ -76,8 +77,8 @@
         .menu-toggle-btn { display: none; background: rgba(255,179,0,0.1); color: var(--gold); border: 1px solid var(--gold); border-radius: 10px; padding: 6px 12px; font-size: 18px; cursor: pointer; }
         .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1500; backdrop-filter: blur(3px); }
 
-        /* تغيير Breakpoint إلى 1024 لضمان التوافق مع الهواتف بالعرض والتابلت */
-        @media (max-width: 1024px) {
+        /* التوافق التام مع شاشات الهاتف */
+        @media (max-width: 768px) {
             .sidebar { transform: translateX(100%); width: 240px; } 
             .sidebar.open { transform: translateX(0); } 
             .sidebar-overlay.open { display: block; } 
@@ -87,19 +88,23 @@
             #welcome-text { font-size: 18px !important; }
             .live-indicator { font-size: 12px; padding: 5px 10px; }
             
+            /* تصغير الكروت */
             .cards-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; } 
             .card { padding: 15px; border-radius: 12px;}
             .card h2 { font-size: 20px; }
             .card h3 { font-size: 11px; }
             .card i { font-size: 1.5em; }
             
+            /* تصغير مسافات الجدول لتوسيع الشاشة */
             .table-container { padding: 10px 5px; border-radius: 10px; margin-bottom: 15px;} 
             table th { padding: 10px 5px; font-size: 12px; }
             table td { padding: 10px 5px; font-size: 12px; }
             
+            /* إخفاء نصوص الأزرار وترك الأيقونات فقط لتوفير المساحة */
             .btn span.btn-text { display: none; }
             .btn { padding: 5px 10px; font-size: 12px; }
             
+            /* ترتيب فلاتر البحث فوق بعضها */
             .filter-group { min-width: 100%; flex: 1 1 100%; margin-bottom: 5px;} 
             .filter-bar { flex-direction: column; align-items: stretch; padding: 10px;}
         }
@@ -305,6 +310,7 @@
             document.getElementById('total-profit').innerText = (me.role === 'super_admin' ? data.stats.totalSales : data.stats.myTotalSales) + " EGP";
             if(document.getElementById('fraud-count')) document.getElementById('fraud-count').innerText = data.stats.fraudCount;
 
+            // تنسيق زر الأكشن ليكون مدمج في سطر واحد
             const actionStyle = "display:flex; justify-content:center; gap:5px;";
 
             const pending = data.orders.filter(o => o.status === 'pending');
@@ -325,6 +331,7 @@
                 </tr>
             `).join('') : '<tr><td colspan="5" style="color:var(--success); padding:20px;"><i class="fas fa-check-circle fa-2x"></i></td></tr>';
 
+            // إضافة زر عرض الإيصال في الأرشيف
             const archive = data.orders.filter(o => o.status === 'completed').reverse();
             document.getElementById('archive-list').innerHTML = archive.map(o => `
                 <tr>
@@ -342,6 +349,7 @@
                 </tr>
             `).join('');
 
+            // إضافة زر عرض الإيصال في الاحتيال
             const frauds = data.orders.filter(o => o.status === 'fraud').reverse();
             if(document.getElementById('fraud-list')) {
                 document.getElementById('fraud-list').innerHTML = frauds.map(o => `
@@ -424,8 +432,7 @@
             document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
-            // إغلاق الشريط الجانبي في حالة حجم الشاشة 1024 أو أقل
-            if(window.innerWidth <= 1024) toggleSidebar();
+            if(window.innerWidth <= 768) toggleSidebar();
         }
 
         function initReportFilters() {
