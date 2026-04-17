@@ -12,7 +12,6 @@ db = client['store_database']
 products_col = db['products']
 orders_col = db['orders']
 users_col = db['users']
-categories_col = db['categories']
 
 def get_time(date_only=False):
     tz = pytz.timezone('Africa/Cairo')
@@ -20,7 +19,7 @@ def get_time(date_only=False):
     return now.strftime('%Y-%m-%d') if date_only else now.strftime('%Y-%m-%d %I:%M %p')
 
 def safe_float(val):
-    if val is None or val == '': return 0.0
+    if val is None: return 0.0
     try: return float(val)
     except (ValueError, TypeError): return 0.0
 
@@ -34,7 +33,6 @@ def index():
 @app.route('/admin-login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # نظام الدخول الأصلي الخاص بك (بدون أي تعديل أو فلسفة)
         user = users_col.find_one({"username": request.json.get('username'), "password": request.json.get('password')})
         if user:
             session['user'] = {"username": user['username'], "role": user['role'], "name": user['name']}
@@ -50,16 +48,6 @@ def logout():
 @app.route('/api/data')
 def get_data():
     products = list(products_col.find({}, {"_id": 0}))
-    categories = list(categories_col.find({}, {"_id": 0}))
-    
-    if not categories:
-        default_categories = [
-            {"id": "cat_1", "name": "خدمات عامة", "parent": "android"},
-            {"id": "cat_2", "name": "خدمات عامة", "parent": "iphone"}
-        ]
-        categories_col.insert_many(default_categories)
-        categories = list(categories_col.find({}, {"_id": 0}))
-        
     if 'user' in session:
         curr_user = session['user']
         all_orders = list(orders_col.find({}, {"_id": 0}))
@@ -85,8 +73,8 @@ def get_data():
             "fraudCount": len(fraud),
             "admins": admins_list
         }
-        return jsonify({"products": products, "categories": categories, "orders": orders_to_send, "stats": stats, "currentUser": curr_user})
-    return jsonify({"products": products, "categories": categories})
+        return jsonify({"products": products, "orders": orders_to_send, "stats": stats, "currentUser": curr_user})
+    return jsonify({"products": products})
 
 @app.route('/api/action', methods=['POST'])
 def handle_action():
@@ -121,28 +109,12 @@ def handle_action():
     elif action == 'restore_fraud':
         orders_col.update_one({"orderId": data['orderId']}, {"$set": {"status": "pending"}, "$unset": {"handled_by": "", "handled_at": ""}})
 
-    elif action == 'manage_category' and curr['role'] == 'super_admin':
-        if data['sub'] == 'add':
-            categories_col.insert_one({"id": "cat_" + str(int(datetime.now().timestamp())), "name": data['name'], "parent": data['parent']})
-        elif data['sub'] == 'delete':
-            categories_col.delete_one({"id": data['id']})
-
     elif action == 'manage_product':
         if data['sub'] == 'add': 
+            # أي موظف يمكنه إضافة منتج، وسيتم تسجيل اسمه
             products_col.insert_one({**data['product'], "added_by": curr['name']})
-        elif data['sub'] == 'edit' and curr['role'] == 'super_admin':
-            update_data = {"name": data['product']['name'], "price": data['product']['price'], "categoryId": data['product']['categoryId']}
-            if data['product'].get('image'): update_data['image'] = data['product']['image']
-            products_col.update_one({"id": data['product']['id']}, {"$set": update_data})
         elif data['sub'] == 'delete' and curr['role'] == 'super_admin':
             products_col.delete_one({"id": data['id']})
-            
-    elif action == 'wipe_database' and curr['role'] == 'super_admin':
-        orders_col.delete_many({})
-        products_col.delete_many({})
-        categories_col.delete_many({})
-        categories_col.insert_many([{"id": "cat_1", "name": "خدمات عامة", "parent": "android"}, {"id": "cat_2", "name": "خدمات عامة", "parent": "iphone"}])
-        users_col.update_many({}, {"$set": {"total_earned": 0}})
         
     elif action == 'manage_staff':
         if data['sub'] == 'self_update':
@@ -150,6 +122,7 @@ def handle_action():
             new_name = data['new_name']
             users_col.update_one({"username": curr['username']}, {"$set": {"name": new_name, "password": data['new_pass']}})
             session['user']['name'] = new_name
+            # التحديث الذكي: تغيير الاسم القديم في كل العمليات السابقة حتى لا تضيع إحصائياته
             if old_name != new_name:
                 orders_col.update_many({"handled_by": old_name}, {"$set": {"handled_by": new_name}})
                 products_col.update_many({"added_by": old_name}, {"$set": {"added_by": new_name}})
@@ -162,6 +135,7 @@ def handle_action():
                 if target and target['role'] != 'super_admin':
                     users_col.delete_one({"username": data['username']})
             elif data['sub'] == 'edit':
+                # تعديل كامل لبيانات الموظف بواسطة المدير الكبير
                 old_username = data['old_username']
                 old_name = data['old_name']
                 new_name = data['new_name']
@@ -172,6 +146,8 @@ def handle_action():
                 if new_pass: update_fields["password"] = new_pass
                 
                 users_col.update_one({"username": old_username}, {"$set": update_fields})
+                
+                # التحديث الذكي لمنع تصفير الأرباح!
                 if old_name != new_name:
                     orders_col.update_many({"handled_by": old_name}, {"$set": {"handled_by": new_name}})
                     products_col.update_many({"added_by": old_name}, {"$set": {"added_by": new_name}})
